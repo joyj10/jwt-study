@@ -15,11 +15,10 @@ import java.io.IOException;
  */
 
 @Slf4j
-public class MyFilter2 implements Filter {
+public class CustomFilter2 implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-      log.info("### filter2 start");
-      filterChain.doFilter(servletRequest, servletResponse);
-
+        log.info("### filter1 start");
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }

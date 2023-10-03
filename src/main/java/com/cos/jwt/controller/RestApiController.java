@@ -1,8 +1,11 @@
 package com.cos.jwt.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.cos.jwt.model.User;
+import com.cos.jwt.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * RestApiController
@@ -13,8 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0,
  */
 
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 public class RestApiController {
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/home")
     public String home() {
@@ -26,5 +34,12 @@ public class RestApiController {
         return "<h1>token</h1>";
     }
 
-
+    @PostMapping("/join")
+    public String join(@RequestBody User user) {
+        log.info("### user = {} ", user);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setRoles("ROLE_USER");
+        userRepository.save(user);
+        return "회원 가입 완료";
+    }
 }
